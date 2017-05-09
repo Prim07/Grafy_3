@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 namespace Grafy_3
 {
+
     public partial class MainWindow : Window
     {
         public MainWindow()
