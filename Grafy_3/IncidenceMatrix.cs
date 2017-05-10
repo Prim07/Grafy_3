@@ -22,7 +22,7 @@ namespace Grafy_3
             // Zliczanie liczby wierzcholkow w macierzy sasiedztwa
             for (int i = 0; i < num_v; i++)
                 for (int j = i + 1; j < num_v; j++)
-                    if (sourceMatrix.AdjacencyArray[i, j] == 1)
+                    if (sourceMatrix.AdjacencyArray[i, j] != 0)     //zmiana z == 1 na != 0
                         num_e++;
 
             IncidenceArray = new int[num_v, num_e];
@@ -38,7 +38,7 @@ namespace Grafy_3
             // Konwersja Macierzy sąsiedztwa -> incydencji
             for (int i = 0; i < num_v; i++)
                 for (int j = i + 1; j < num_v; j++)
-                    if (sourceMatrix.AdjacencyArray[i, j] == 1)
+                    if (sourceMatrix.AdjacencyArray[i, j] != 0)      //zmiana z == 1 na != 0
                     {
                         IncidenceArray[i, k] = -1;
                         IncidenceArray[j, k] = 1;

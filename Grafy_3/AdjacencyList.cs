@@ -37,7 +37,7 @@ namespace Grafy_3
             {
                 for (int i = 0; i < num_v; i++)
                 {
-                    if (sourceMatrix.IncidenceArray[i, j] == 1)
+                    if (sourceMatrix.IncidenceArray[i, j] == 1 )           
                         tmp2 = i;
                     else if (sourceMatrix.IncidenceArray[i, j] == -1)
                         tmp1 = i;

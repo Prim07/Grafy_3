@@ -112,7 +112,7 @@ namespace Grafy_3
 
                 for (int j = i; j <= AdjacencyArray.GetLength(0); j++)
                 {
-                    if (AdjacencyArray[i - 1, j - 1] == 1)
+                    if (AdjacencyArray[i - 1, j - 1] != 0)                      //      tu zmieniliśmy z == 1 na !=0
                     {
                         var angle_2 = (2 * Math.PI) / num_v * j;
 
