@@ -44,137 +44,137 @@ namespace Grafy_3
                 var howManyVertex = Int32.Parse(Number_Of_Vertex.Text);     // rzutowanie wartosci na inta, bo tak jest fajnie
                 adjacencyMatrix = new AdjacencyMatrix(howManyVertex);       // stworzenie macierzy sasiedztwa 
                 Number_Of_Vertex.Background = Brushes.White;                // tlo pola białe- dobrze wpisaliśmy, jeeej!
-                
+
                 StackPanelWithConnections.Children.Clear();                 //?
 
                 bool success = false;                                       // sprawdza czy wylosowaliśmy graf spójny
                 while (!success)
-                    success = Connected_Graph(howManyVertex,adjacencyMatrix);
+                    success = Connected_Graph(howManyVertex, adjacencyMatrix);
 
 
             }
             else
             {
                 Number_Of_Vertex.Background = Brushes.OrangeRed;
-                
+
             }
 
             adjacencyMatrix.Display(StackPanelForDisplayingAdjacencyMatrix, MyCanvas, StackPanelForDisplayingIncidenceMatrix, StackPanelForDisplayingAdjacencylist);
 
 
-         }
+        }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////   rzeczy Artura z 1. zestawu, podobno wszystko dobrze i nie ruszać    //////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            private void GenerateConnections(int num_v, int num_e)
+        private void GenerateConnections(int num_v, int num_e)
+        {
+
+            StackPanelWithConnections.Children.Clear();
+
+            adjacencyMatrix = new AdjacencyMatrix(num_v);
+            adjacencyMatrix.Display(StackPanelForDisplayingAdjacencyMatrix, MyCanvas, StackPanelForDisplayingIncidenceMatrix, StackPanelForDisplayingAdjacencylist);
+
+
+            TextBlock tmpBlock = new TextBlock();
+            tmpBlock.Text = "Uzupełnij połączenia:";
+            tmpBlock.VerticalAlignment = VerticalAlignment.Center;
+            tmpBlock.Margin = new Thickness(10, 20, 0, 20);
+            StackPanelWithConnections.Children.Add(tmpBlock);
+
+            int j = 0;
+
+            ListOfLeftComboBoxes = new List<ComboBox>();
+            ListOfRightComboBoxes = new List<ComboBox>();
+
+            for (int i = 0; i < num_e; i++)
             {
-
-                StackPanelWithConnections.Children.Clear();
-
-                adjacencyMatrix = new AdjacencyMatrix(num_v);
-                adjacencyMatrix.Display(StackPanelForDisplayingAdjacencyMatrix, MyCanvas, StackPanelForDisplayingIncidenceMatrix, StackPanelForDisplayingAdjacencylist);
-
-
-                TextBlock tmpBlock = new TextBlock();
-                tmpBlock.Text = "Uzupełnij połączenia:";
-                tmpBlock.VerticalAlignment = VerticalAlignment.Center;
-                tmpBlock.Margin = new Thickness(10, 20, 0, 20);
-                StackPanelWithConnections.Children.Add(tmpBlock);
-
-                int j = 0;
-
-                ListOfLeftComboBoxes = new List<ComboBox>();
-                ListOfRightComboBoxes = new List<ComboBox>();
-
-                for (int i = 0; i < num_e; i++)
-                {
-                    StackPanel stackPanelForConn = new StackPanel();
-                    stackPanelForConn.Orientation = Orientation.Horizontal;
-                    stackPanelForConn.Margin = new Thickness(20, 0, 0, 0);
+                StackPanel stackPanelForConn = new StackPanel();
+                stackPanelForConn.Orientation = Orientation.Horizontal;
+                stackPanelForConn.Margin = new Thickness(20, 0, 0, 0);
 
 
 
 
 
-                    StackPanelWithConnections.Children.Add(stackPanelForConn);
+                StackPanelWithConnections.Children.Add(stackPanelForConn);
 
-                    j += 2;
-                }
+                j += 2;
+            }
+
+        }
+
+        // Uzupełnienie ComboBoxa danymi
+        private void SetComboBox(int e, ComboBox comboBox)
+        {
+            comboBox.Width = 40;
+            for (int i = 1; i <= e; i++)
+            {
+                ComboBoxItem newItem = new ComboBoxItem();
+                newItem.Content = i;
+                comboBox.Items.Add(newItem);
+            }
+        }
+
+        // Jeśli rozwiniemy listę w "połączenie od: "
+        private void FromComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            ComboBox myComboBox = sender as ComboBox;
+
+            if (myComboBox.SelectedItem != null)
+            {
+                ComboBoxItem typeItemLeft = (ComboBoxItem)myComboBox.SelectedItem;
+                int previousLeftValue = Int32.Parse(typeItemLeft.Content.ToString());
+
+                var comboBoxRight = ListOfLeftComboBoxes.Find(x => (int)x.Tag == (int)myComboBox.Tag + 1);
+                ComboBoxItem typeItemRight = (ComboBoxItem)comboBoxRight.SelectedItem;
+                int previosuRightValue = Int32.Parse(typeItemRight.Content.ToString());
+
+                adjacencyMatrix.AdjacencyArray[previousLeftValue - 1, previosuRightValue - 1] = 0;
+                adjacencyMatrix.AdjacencyArray[previosuRightValue - 1, previousLeftValue - 1] = 0;
 
             }
 
-            // Uzupełnienie ComboBoxa danymi
-            private void SetComboBox(int e, ComboBox comboBox)
-            {
-                comboBox.Width = 40;
-                for (int i = 1; i <= e; i++)
-                {
-                    ComboBoxItem newItem = new ComboBoxItem();
-                    newItem.Content = i;
-                    comboBox.Items.Add(newItem);
-                }
-            }
-
-            // Jeśli rozwiniemy listę w "połączenie od: "
-            private void FromComboBox_DropDownOpened(object sender, EventArgs e)
-            {
-                ComboBox myComboBox = sender as ComboBox;
-
-                if (myComboBox.SelectedItem != null)
-                {
-                    ComboBoxItem typeItemLeft = (ComboBoxItem)myComboBox.SelectedItem;
-                    int previousLeftValue = Int32.Parse(typeItemLeft.Content.ToString());
-
-                    var comboBoxRight = ListOfLeftComboBoxes.Find(x => (int)x.Tag == (int)myComboBox.Tag + 1);
-                    ComboBoxItem typeItemRight = (ComboBoxItem)comboBoxRight.SelectedItem;
-                    int previosuRightValue = Int32.Parse(typeItemRight.Content.ToString());
-
-                    adjacencyMatrix.AdjacencyArray[previousLeftValue - 1, previosuRightValue - 1] = 0;
-                    adjacencyMatrix.AdjacencyArray[previosuRightValue - 1, previousLeftValue - 1] = 0;
-
-                }
-
-            }
+        }
 
 
 
-            // Rowniez sprawdza Num_of_E, nie tylko Num_of_V
-            private void Num_of_V_PreviewTextInput(object sender, TextCompositionEventArgs e)
-            {
-                Regex regex = new Regex("[^0-9]+");
-                e.Handled = regex.IsMatch(e.Text);
-            }
+        // Rowniez sprawdza Num_of_E, nie tylko Num_of_V
+        private void Num_of_V_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
 
 
-            private void StackPanelForDisplayingAdjacencyMatrix_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-            {
-                StackPanelForPreview.Visibility = Visibility.Visible;
-                PreviewScrollViewer.Visibility = Visibility.Visible;
-                adjacencyMatrix.Preview(StackPanelForPreview);
-            }
+        private void StackPanelForDisplayingAdjacencyMatrix_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            StackPanelForPreview.Visibility = Visibility.Visible;
+            PreviewScrollViewer.Visibility = Visibility.Visible;
+            adjacencyMatrix.Preview(StackPanelForPreview);
+        }
 
-            private void StackPanelForDisplayingIncidenceMatrix_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-            {
-                StackPanelForPreview.Visibility = Visibility.Visible;
-                PreviewScrollViewer.Visibility = Visibility.Visible;
-                adjacencyMatrix.PreviewIncidence(StackPanelForPreview);
-            }
+        private void StackPanelForDisplayingIncidenceMatrix_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            StackPanelForPreview.Visibility = Visibility.Visible;
+            PreviewScrollViewer.Visibility = Visibility.Visible;
+            adjacencyMatrix.PreviewIncidence(StackPanelForPreview);
+        }
 
-            private void StackPanelForDisplayingAdjacencylist_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-            {
-                StackPanelForPreview.Visibility = Visibility.Visible;
-                PreviewScrollViewer.Visibility = Visibility.Visible;
-                adjacencyMatrix.PreviewAdjacencyList(StackPanelForPreview);
-            }
+        private void StackPanelForDisplayingAdjacencylist_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            StackPanelForPreview.Visibility = Visibility.Visible;
+            PreviewScrollViewer.Visibility = Visibility.Visible;
+            adjacencyMatrix.PreviewAdjacencyList(StackPanelForPreview);
+        }
 
-            private void StackPanelForPreview_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-            {
-                StackPanel stackPanelForPreview = sender as StackPanel;
-                stackPanelForPreview.Visibility = Visibility.Hidden;
-                PreviewScrollViewer.Visibility = Visibility.Hidden;
+        private void StackPanelForPreview_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            StackPanel stackPanelForPreview = sender as StackPanel;
+            stackPanelForPreview.Visibility = Visibility.Hidden;
+            PreviewScrollViewer.Visibility = Visibility.Hidden;
 
-            }
+        }
 
         ///////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////
@@ -206,8 +206,9 @@ namespace Grafy_3
                     }
                     else
                     {
-                        adjacencyMatrix.AdjacencyArray[i, j] = r1.Next(1, 10);
-                        adjacencyMatrix.AdjacencyArray[j, i] = r1.Next(1, 10);
+                        int tmp = r1.Next(1, 10);
+                        adjacencyMatrix.AdjacencyArray[i, j] = tmp;
+                        adjacencyMatrix.AdjacencyArray[j, i] = tmp;
                     }
                     adjacencyMatrix.AdjacencyArray[i, i] = 0;
                 }
@@ -286,20 +287,152 @@ namespace Grafy_3
                     ile++;
                 }
             }
-            
+
             // jesli NSS nie jest równe liczbie wierzcholkow to zwracamy false- funkcja bedzie wykonywała się kolejny raz, 
             // aż wygeneruje taki graf losowy dla którego NSS = liczbie wierzcholkow 
             if (max != howManyVertex)
                 return false;
-             return true;
+            return true;
 
 
         }
 
+
+        
+
+
+        public class Dijkstra
+        {
+            public const int INF = 100000000;
+            public int[,] Matrix;
+            
+            // konstruktor, bedzie przepisaywał do Matrix macierz AdjacencyMatrix
+            public Dijkstra(int[,] matrix)
+            {
+                Matrix = matrix;
+            }
+
+            
+            public int [] ShortestPath(int vertexStart, int vertexStop) // znajduje odleglosc miedzy dwama konkretnymi wierzcholkami
+            {
+                int size = Matrix.GetLength(0); // wymiar macierzy - zmienna okresla ile jest wierzchołków
+                int[] tabDistance = new int [size];  // odleglosc od wierzcholka WhichVertex do każdego z pozostałych wierzchołkow
+                int[] tabParent = new int[size];    // przechowywane sa wierzcholki z ktorych przyszlismy
+
+                //??
+                int[] vertexes = new int[size];     // przechowywane są wierzcholki ????
+
+                for (int i = 0; i < size; i++)
+                {
+                    tabDistance[i] = INF;
+                    tabParent[i] = INF;
+                    vertexes[i] = i;
+                }
+
+                tabDistance[vertexStart] = 0;
+
+                while(size > 0)
+                {
+                    int smallest = vertexes[0];     // element do ktorego krawedz jest najkrotsza
+                    int smallestIndex = 0;          
+                    for (int i = 1; i < size; i++)
+                    {
+                        if (tabDistance[vertexes[i]] < tabDistance[smallest])
+                        {
+                            smallest = vertexes[i];
+                            smallestIndex = i;
+                        }
+                    }
+                    // znalezlismy juz najkrotsza sciezke do elementu smallest, wiec zmiejszamy rozmiar tablicy a w miejsce wierzchlka juz sprawdzonego 
+                    // wpisujemy ten wierzcholek ktory był w vertexes [size-1]
+                    size--;
+                    vertexes[smallestIndex] = vertexes[size];   
+
+                    if (smallest == vertexStop)
+                        break;
+
+                    for (int i = 0; i < size; i++)
+                    {
+                        int v = vertexes[i];
+                        int newDist = tabDistance[smallest] + Matrix[smallest, v]; 
+
+                        if (newDist < tabDistance[v])
+                        {
+                            tabDistance[v] = newDist;
+                            tabParent[v] = smallest;
+                        }
+                    }
+
+                }
+
+                return Path(vertexStart, vertexStop, tabParent, Matrix.GetLength(0));
+            }
+
+            public int[] Path (int vertexStart, int vertexStop, int [] tabParent, int size)
+            {
+                int[] tabPath = new int[size];
+                for (int i = 0; i < size; i++)
+                    tabPath[i] = -1;
+
+                int currentVertex = vertexStop;
+                int counter = 0;
+                while (tabParent[currentVertex] != vertexStart)
+                {
+                    tabPath[counter] = tabParent[currentVertex];
+                    currentVertex = tabParent[currentVertex];
+                    counter++;
+                }
+
+                return tabPath;
+            }
+        };
+
+        // alg. Dijkstry
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+             var whichVertex = Int32.Parse(WhichVertex.Text);
+             whichVertex--;
+             var howManyVertexes = Int32.Parse(Number_Of_Vertex.Text);
+
+              int [,] Array = adjacencyMatrix.AdjacencyArray;
+              Dijkstra tmp = new Dijkstra(Array);
+
+
+            string output = "Ścieżki: "; 
+
+             for (int i = 0; i < howManyVertexes; i++ )
+            {
+                int[] tabResult = new int[howManyVertexes];
+                for (int k = 0; k < howManyVertexes; k++)
+                    tabResult[k] = -1;
+
+                if (i == whichVertex)
+                    continue;
+                tabResult = tmp.ShortestPath(whichVertex, i);
+
+
+
+
+                output += "od " + (whichVertex+1) + " do " + (i+1) + ": ";  
+
+                for (int j = howManyVertexes - 1; j >= 0; j--)
+                {
+                    if (tabResult[j] == -1)
+                        continue;
+                    output += tabResult[j].ToString() + ", ";
+                }
+
+            }
+
+            result.Text = output;
+
+
+        }
     }
-
-
 }
+
+
+
 
 
 
