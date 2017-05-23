@@ -446,7 +446,7 @@ namespace Grafy_3
 
 
         }
-        // Dijstra dla wszystkich wierzchołków macierz odległości
+        // Dijstra dla wszystkich wierzchołków macierz odległości, centrum grafu i minimax
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             var howManyVertexes = Int32.Parse(Number_Of_Vertex.Text);
@@ -536,7 +536,101 @@ namespace Grafy_3
             miniMAX.Text = "Centrum miniMAX: wierzchołek " + (indexDis + 1) + ", wartość: " + tmpMinDis;
         }
 
-       
+
+
+
+
+
+        //alg. Prima
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            // linia 62. do wypisania na ekran?
+            var howManyVertexes = Int32.Parse(Number_Of_Vertex.Text);
+            int[,] Array = adjacencyMatrix.AdjacencyArray;
+            int[,] displayArray = new int[howManyVertexes, howManyVertexes];
+            /*
+            int[] vertexes = new int[howManyVertexes];            //talbica na wszystkie wierzchołki
+            for (int i = 0; i < howManyVertexes; i++)
+                vertexes[i] = i;
+*/
+            int[] checkedVertexes = new int[howManyVertexes];            //tablica na odwiedzone wierzchołki
+            int[,] next = new int[howManyVertexes* howManyVertexes, 3];              // tablica na wierzcholki, od których możemy teraz wyjść (zawiera nr wierzcholka do ktorego mozemy isc i wage krawedzi ktora  do niego prowadzi)
+
+
+            /// ?? /////////
+            Random r = new Random();
+            int startVertex = r.Next(0, howManyVertexes-1);
+
+            checkedVertexes[0] = startVertex;
+            int actVertex = startVertex;
+            int counterNext = 0;
+            int howManyVertexesChecked = 1;
+            while ( howManyVertexesChecked < howManyVertexes) //=
+            //for (int j = 0; j < howManyVertexes; j++)
+            {
+                for (int i = 0; i < howManyVertexes; i++)
+                {
+                    if (Array[actVertex, i] != 0)
+                    {
+                        int flag = 0;
+                        for(int j=0; j<howManyVertexesChecked; j++)
+                        {
+                            if (checkedVertexes[j] == i)
+                                flag = 1;
+                        }
+                        if (flag == 1) continue;
+                        next[counterNext, 0] = actVertex; //checkedVertexes[actVertex];
+                        next[counterNext, 1] = i;
+                        next[counterNext, 2] = Array[actVertex, i];
+                        counterNext++;
+                    }
+                }
+
+                //int min = 1000000;
+                int whichEdge = 0;
+                //int whereFrom = 0;
+                while (true)
+                {
+                    int min = 1000000;
+                    for (int k = 0; k < counterNext; k++)
+                    {
+                        if (next[k, 2] < min)
+                        {
+                            min = next[k, 2];
+                            whichEdge = k;
+                            //whereFrom = next[k, 0];
+                        }
+                    }
+                    int flag = 0;
+                    for (int m = 0; m < howManyVertexesChecked; m++)
+                    {
+                        if (next[whichEdge, 1] == checkedVertexes[m])
+                            flag = 1;
+                    }
+                    if (flag == 0)
+                        break;
+                    else next[whichEdge, 2] = 1000;
+                }
+                /////////////////// wypisac
+
+                actVertex = next[whichEdge, 1];
+                displayArray[next[whichEdge, 0], next[whichEdge, 1]] = next[whichEdge, 2];
+                displayArray[next[whichEdge, 1], next[whichEdge, 0]] = next[whichEdge, 2];
+
+                for (int k = whichEdge+1; k < counterNext; k++)
+                {
+                    for (int l = 0; l < 3; l++)
+                        next[k, l] = next[k - 1, l];
+
+                }
+                checkedVertexes[howManyVertexesChecked] = next[whichEdge,1];
+                howManyVertexesChecked++;
+                counterNext--;
+                
+                
+            }
+            //adjacencyMatrix.DrawGraph(displayArray.GetLength(0), MyCanvas);
+        }
     }
 }
 

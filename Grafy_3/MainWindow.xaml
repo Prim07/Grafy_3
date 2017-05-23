@@ -28,6 +28,7 @@
             <TextBox x:Name="matrixOfDistance" HorizontalAlignment="Left" Height="69" Margin="51,0,0,0" TextWrapping="Wrap" Text="Macierz odległości" Width="203"/>
             <TextBox x:Name="centre" HorizontalAlignment="Left" Height="26" Margin="18,0,0,0" TextWrapping="Wrap" Text="Centrum grafu" Width="236"/>
             <TextBox x:Name="miniMAX" HorizontalAlignment="Left" Height="32" Margin="18,0,0,0" TextWrapping="Wrap" Text="Centrum minimax" Width="236"/>
+            <Button Content="4. Znajdź minimalne drzewo rozpinające" HorizontalAlignment="Left" Height="56" Margin="35,0,0,0" Width="219" Click="Button_Click_3"/>
 
         </StackPanel>
 

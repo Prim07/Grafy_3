@@ -63,7 +63,7 @@ namespace Grafy_3
         }
 
         // Wizualizacja grafu na macierzy
-        private void DrawGraph(int num_v, Canvas MyCanvas)
+        public void DrawGraph(int num_v, Canvas MyCanvas)
         {
             MyCanvas.Children.Clear();
 
