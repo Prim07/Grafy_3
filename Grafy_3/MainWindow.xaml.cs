@@ -298,25 +298,29 @@ namespace Grafy_3
         }
 
 
-        
+
 
 
         public class Dijkstra
         {
-            public const int INF = 100000000;
+            public const int INF = 1000000;
             public int[,] Matrix;
-            
+
             // konstruktor, bedzie przepisaywał do Matrix macierz AdjacencyMatrix
             public Dijkstra(int[,] matrix)
             {
                 Matrix = matrix;
+                for (int i = 0; i < Matrix.GetLength(0); i++)
+                    for (int j = 0; j < Matrix.GetLength(1); j++)
+                        if (Matrix[i, j] == 0)
+                            Matrix[i, j] = INF;
             }
 
-            
-            public int [] ShortestPath(int vertexStart, int vertexStop) // znajduje odleglosc miedzy dwama konkretnymi wierzcholkami
+
+            public int[] ShortestPath(int vertexStart, int vertexStop) // znajduje odleglosc miedzy dwama konkretnymi wierzcholkami
             {
                 int size = Matrix.GetLength(0); // wymiar macierzy - zmienna okresla ile jest wierzchołków
-                int[] tabDistance = new int [size];  // odleglosc od wierzcholka WhichVertex do każdego z pozostałych wierzchołkow
+                int[] tabDistance = new int[size];  // odleglosc od wierzcholka WhichVertex do każdego z pozostałych wierzchołkow
                 int[] tabParent = new int[size];    // przechowywane sa wierzcholki z ktorych przyszlismy
 
                 //??
@@ -331,10 +335,10 @@ namespace Grafy_3
 
                 tabDistance[vertexStart] = 0;
 
-                while(size > 0)
+                while (size > 0)
                 {
                     int smallest = vertexes[0];     // element do ktorego krawedz jest najkrotsza
-                    int smallestIndex = 0;          
+                    int smallestIndex = 0;
                     for (int i = 1; i < size; i++)
                     {
                         if (tabDistance[vertexes[i]] < tabDistance[smallest])
@@ -346,7 +350,7 @@ namespace Grafy_3
                     // znalezlismy juz najkrotsza sciezke do elementu smallest, wiec zmiejszamy rozmiar tablicy a w miejsce wierzchlka juz sprawdzonego 
                     // wpisujemy ten wierzcholek ktory był w vertexes [size-1]
                     size--;
-                    vertexes[smallestIndex] = vertexes[size];   
+                    vertexes[smallestIndex] = vertexes[size];
 
                     if (smallest == vertexStop)
                         break;
@@ -354,7 +358,7 @@ namespace Grafy_3
                     for (int i = 0; i < size; i++)
                     {
                         int v = vertexes[i];
-                        int newDist = tabDistance[smallest] + Matrix[smallest, v]; 
+                        int newDist = tabDistance[smallest] + Matrix[smallest, v];
 
                         if (newDist < tabDistance[v])
                         {
@@ -368,7 +372,7 @@ namespace Grafy_3
                 return Path(vertexStart, vertexStop, tabParent, Matrix.GetLength(0));
             }
 
-            public int[] Path (int vertexStart, int vertexStop, int [] tabParent, int size)
+            public int[] Path(int vertexStart, int vertexStop, int[] tabParent, int size)
             {
                 int[] tabPath = new int[size];
                 for (int i = 0; i < size; i++)
@@ -390,19 +394,21 @@ namespace Grafy_3
         // alg. Dijkstry
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-             var whichVertex = Int32.Parse(WhichVertex.Text);
-             whichVertex--;
-             var howManyVertexes = Int32.Parse(Number_Of_Vertex.Text);
+            var whichVertex = Int32.Parse(WhichVertex.Text);
+            whichVertex--;
+            var howManyVertexes = Int32.Parse(Number_Of_Vertex.Text);
 
-              int [,] Array = adjacencyMatrix.AdjacencyArray;
-              Dijkstra tmp = new Dijkstra(Array);
+            int[,] Array = adjacencyMatrix.AdjacencyArray;
+            Dijkstra tmp = new Dijkstra(Array);
 
 
-            string output = "Ścieżki: "; 
+            string output = "Ścieżki: ";
 
-             for (int i = 0; i < howManyVertexes; i++ )
+            for (int i = 0; i < howManyVertexes; i++)
             {
                 int[] tabResult = new int[howManyVertexes];
+                int lengthPath = 0;
+                int end = 0;
                 for (int k = 0; k < howManyVertexes; k++)
                     tabResult[k] = -1;
 
@@ -411,16 +417,28 @@ namespace Grafy_3
                 tabResult = tmp.ShortestPath(whichVertex, i);
 
 
+                if (tabResult[0] == -1)
+                    lengthPath = adjacencyMatrix.AdjacencyArray[whichVertex, i];
+                else lengthPath = adjacencyMatrix.AdjacencyArray[tabResult[0], i];
 
-
-                output += "od " + (whichVertex+1) + " do " + (i+1) + ": ";  
+                output += "\r\nod " + (whichVertex + 1) + " do " + (i + 1) + ": " + (whichVertex + 1) + ", ";
 
                 for (int j = howManyVertexes - 1; j >= 0; j--)
                 {
                     if (tabResult[j] == -1)
+                    {
+                        end = j;
                         continue;
-                    output += tabResult[j].ToString() + ", ";
+                    }
+                    if (j != 0)
+                        lengthPath += adjacencyMatrix.AdjacencyArray[tabResult[j], tabResult[j - 1]];
+
+                    output += (tabResult[j] + 1).ToString() + ", ";
                 }
+                if (tabResult[0] == -1)
+                    output += "";
+                else lengthPath += adjacencyMatrix.AdjacencyArray[whichVertex, tabResult[(end - 1)]];
+                output += (i + 1) + " długość ścieżki: " + lengthPath.ToString() + " ";
 
             }
 
@@ -428,6 +446,97 @@ namespace Grafy_3
 
 
         }
+        // Dijstra dla wszystkich wierzchołków macierz odległości
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            var howManyVertexes = Int32.Parse(Number_Of_Vertex.Text);
+            int[,] Array = adjacencyMatrix.AdjacencyArray;
+            Dijkstra tmp = new Dijkstra(Array);
+            string output = "Macierz odległości";
+
+            int[] tabSumRow = new int[howManyVertexes];
+            int[] tabMaxDis = new int[howManyVertexes];
+
+            for (int v = 0; v < howManyVertexes; v++)
+            {
+                int sumRow = 0;     // suma odległosci we wszystkich rzędach
+               
+                int maxDis = -1000000;     // maksymalna odgległosc w kazdym rzedzie
+
+                output += "\r\n";
+                for (int i = 0; i < howManyVertexes; i++)
+                {
+
+                    int[] tabResult = new int[howManyVertexes];
+                    int lengthPath = 0;
+                    int end = 0;
+                    for (int k = 0; k < howManyVertexes; k++)
+                        tabResult[k] = -1;
+
+                    if (i == v)
+                    {
+                        output += "0 "; 
+                        continue;
+                    }
+                    tabResult = tmp.ShortestPath(v, i);
+
+
+                    if (tabResult[0] == -1)
+                        lengthPath = adjacencyMatrix.AdjacencyArray[v, i];
+                    else lengthPath = adjacencyMatrix.AdjacencyArray[tabResult[0], i];
+
+                    output += " ";
+
+                    for (int j = howManyVertexes - 1; j >= 0; j--)
+                    {
+                        if (tabResult[j] == -1)
+                        {
+                            end = j;
+                            continue;
+                        }
+                        if (j != 0)
+                            lengthPath += adjacencyMatrix.AdjacencyArray[tabResult[j], tabResult[j - 1]];
+
+                    }
+                    if (tabResult[0] == -1)
+                        output += "";
+                    else lengthPath += adjacencyMatrix.AdjacencyArray[v, tabResult[(end - 1)]];
+
+                    sumRow += lengthPath;
+                    if (lengthPath > maxDis)
+                        maxDis = lengthPath;
+
+                    output += lengthPath.ToString() + " ";
+
+               }
+                tabSumRow[v] = sumRow;
+                tabMaxDis[v] = maxDis;
+            }
+
+            int tmpMin = 100000;
+            int tmpMinDis = 1000000;
+            int indexDis = 0;
+            int index = 0;
+            for (int i = 0; i < howManyVertexes; i++)
+            {
+                if (tabSumRow[i] < tmpMin)
+                {
+                    tmpMin = tabSumRow[i];
+                    index = i;
+                }
+                if (tabMaxDis[i] < tmpMinDis)
+                {
+                    tmpMinDis = tabMaxDis[i];
+                    indexDis = i;
+                }
+            }
+
+            matrixOfDistance.Text = output;
+            centre.Text = "Centrum grafu: wierzchołek " + (index+1) + ", wartość: " + tmpMin;
+            miniMAX.Text = "Centrum miniMAX: wierzchołek " + (indexDis + 1) + ", wartość: " + tmpMinDis;
+        }
+
+       
     }
 }
 
