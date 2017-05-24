@@ -578,6 +578,8 @@ namespace Grafy_3
                             if (checkedVertexes[j] == i)
                                 flag = 1;
                         }
+
+
                         if (flag == 1) continue;
                         next[counterNext, 0] = actVertex; //checkedVertexes[actVertex];
                         next[counterNext, 1] = i;
@@ -613,6 +615,7 @@ namespace Grafy_3
                 }
                 /////////////////// wypisac
 
+
                 actVertex = next[whichEdge, 1];
                 displayArray[next[whichEdge, 0], next[whichEdge, 1]] = next[whichEdge, 2];
                 displayArray[next[whichEdge, 1], next[whichEdge, 0]] = next[whichEdge, 2];
@@ -640,6 +643,9 @@ namespace Grafy_3
                 for (int j = 0; j < displayArray.GetLength(1); j++)
                     output += displayArray[i, j] + " ";
             }
+            AdjacencyMatrix tmpAdjMatrix = new AdjacencyMatrix(displayArray.GetLength(0));
+            tmpAdjMatrix.AdjacencyArray = displayArray;
+            tmpAdjMatrix.Display(StackPanelForDisplayingAdjacencyMatrix, MyCanvas, StackPanelForDisplayingIncidenceMatrix, StackPanelForDisplayingAdjacencylist);
             MST.Text = output;
         }
     }
