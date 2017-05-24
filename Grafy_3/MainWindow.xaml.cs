@@ -324,7 +324,7 @@ namespace Grafy_3
                 int[] tabParent = new int[size];    // przechowywane sa wierzcholki z ktorych przyszlismy
 
                 //??
-                int[] vertexes = new int[size];     // przechowywane są wierzcholki ????
+                int[] vertexes = new int[size];     // przechowywane są wszystkie wierzcholki do których nie mamy jeszcze najkrótszej ścieżki
 
                 for (int i = 0; i < size; i++)
                 {
@@ -337,9 +337,9 @@ namespace Grafy_3
 
                 while (size > 0)
                 {
-                    int smallest = vertexes[0];     // element do ktorego krawedz jest najkrotsza
+                    int smallest = vertexes[0];     // wierzchołek do którego mamy najkrótszą ścieżkę
                     int smallestIndex = 0;
-                    for (int i = 1; i < size; i++)
+                    for (int i = 1; i < size; i++)  // szukamy najmniejszej wartości w tabDistance, czyli najkrótszej możliwej sciezki
                     {
                         if (tabDistance[vertexes[i]] < tabDistance[smallest])
                         {
@@ -372,7 +372,7 @@ namespace Grafy_3
                 return Path(vertexStart, vertexStop, tabParent, Matrix.GetLength(0));
             }
 
-            public int[] Path(int vertexStart, int vertexStop, int[] tabParent, int size)
+            public int[] Path(int vertexStart, int vertexStop, int[] tabParent, int size) // zwraca ścieżkę pomiedzy 2 wierzchołkami, ale bez tych 2 wierzchołków
             {
                 int[] tabPath = new int[size];
                 for (int i = 0; i < size; i++)
@@ -544,7 +544,7 @@ namespace Grafy_3
         //alg. Prima
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            // linia 62. do wypisania na ekran?
+            
             var howManyVertexes = Int32.Parse(Number_Of_Vertex.Text);
             int[,] Array = adjacencyMatrix.AdjacencyArray;
             int[,] displayArray = new int[howManyVertexes, howManyVertexes];
@@ -592,7 +592,7 @@ namespace Grafy_3
                 while (true)
                 {
                     int min = 1000000;
-                    for (int k = 0; k < counterNext; k++)
+                    for (int k = 0; k < counterNext; k++) // <=
                     {
                         if (next[k, 2] < min)
                         {
@@ -617,19 +617,30 @@ namespace Grafy_3
                 displayArray[next[whichEdge, 0], next[whichEdge, 1]] = next[whichEdge, 2];
                 displayArray[next[whichEdge, 1], next[whichEdge, 0]] = next[whichEdge, 2];
 
+                next[whichEdge, 2] = 1000;
+                /*
                 for (int k = whichEdge+1; k < counterNext; k++)
                 {
                     for (int l = 0; l < 3; l++)
                         next[k, l] = next[k - 1, l];
 
                 }
+                */
                 checkedVertexes[howManyVertexesChecked] = next[whichEdge,1];
                 howManyVertexesChecked++;
-                counterNext--;
+                //counterNext--;
                 
                 
             }
             //adjacencyMatrix.DrawGraph(displayArray.GetLength(0), MyCanvas);
+            string output = "MST: od wierzchołka " + (startVertex+1);
+            for (int i = 0; i < displayArray.GetLength(0); i++)
+            {
+                output += "\r\n";
+                for (int j = 0; j < displayArray.GetLength(1); j++)
+                    output += displayArray[i, j] + " ";
+            }
+            MST.Text = output;
         }
     }
 }

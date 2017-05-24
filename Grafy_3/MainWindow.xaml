@@ -18,17 +18,18 @@
                 <TextBox x:Name="Number_Of_Vertex" Width="66" Height="20" Text="5"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="18,10,0,0"/>
-            <Button Content="2. Znajdź najkrótszą ścieżkę od wierzchołka:" HorizontalAlignment="Left" Height="44" Width="254" Click="Button_Click_1"/>
+            <Button Content="2. Znajdź najkrótszą ścieżkę od wierzchołka:" HorizontalAlignment="Left" Height="44" Width="252" Click="Button_Click_1"/>
             <StackPanel Orientation="Horizontal" Margin="10,10,0,0"/>
             <TextBox x:Name="WhichVertex" HorizontalAlignment="Right" Height="27" Margin="0,0,207,0" TextWrapping="Wrap" Text="1" Width="42" RenderTransformOrigin="-0.138,0.337"/>
             <StackPanel Orientation="Horizontal"  Margin="10,5,0,0"/>
             <StackPanel Name="StackPanelWithConnections" />
-            <TextBox x:Name="result" HorizontalAlignment="Left" Height="71" Margin="18,0,0,0" TextWrapping="Wrap" Text="Ścieżki" Width="236"/>
-            <Button Content="3. Wyznacz macierz odległości" HorizontalAlignment="Left" Height="40" Margin="18,0,0,0" Width="252" Click="Button_Click_2"/>
-            <TextBox x:Name="matrixOfDistance" HorizontalAlignment="Left" Height="69" Margin="51,0,0,0" TextWrapping="Wrap" Text="Macierz odległości" Width="203"/>
-            <TextBox x:Name="centre" HorizontalAlignment="Left" Height="26" Margin="18,0,0,0" TextWrapping="Wrap" Text="Centrum grafu" Width="236"/>
-            <TextBox x:Name="miniMAX" HorizontalAlignment="Left" Height="32" Margin="18,0,0,0" TextWrapping="Wrap" Text="Centrum minimax" Width="236"/>
-            <Button Content="4. Znajdź minimalne drzewo rozpinające" HorizontalAlignment="Left" Height="56" Margin="35,0,0,0" Width="219" Click="Button_Click_3"/>
+            <TextBox x:Name="result" HorizontalAlignment="Left" Height="72" TextWrapping="Wrap" Text="Ścieżki" Width="300"/>
+            <Button Content="3. Wyznacz macierz odległości" HorizontalAlignment="Left" Height="40" Width="300" Click="Button_Click_2"/>
+            <TextBox x:Name="matrixOfDistance" HorizontalAlignment="Left" Height="110" TextWrapping="Wrap" Text="Macierz odległości" Width="300"/>
+            <TextBox x:Name="centre" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" Text="Centrum grafu" Width="300"/>
+            <TextBox x:Name="miniMAX" HorizontalAlignment="Left" Height="32" TextWrapping="Wrap" Text="Centrum minimax" Width="300"/>
+            <Button Content="4. Znajdź minimalne drzewo rozpinające (alg. Prima)" HorizontalAlignment="Left" Height="56" Width="300" Click="Button_Click_3"/>
+            <TextBox x:Name="MST" HorizontalAlignment="Left" Height="124" TextWrapping="Wrap" Text="MST" Width="300"/>
 
         </StackPanel>
 
